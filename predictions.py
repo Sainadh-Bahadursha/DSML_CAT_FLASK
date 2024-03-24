@@ -11,7 +11,7 @@ def hello_world():
 def pinger():
     return "<H1>I am pinging!</H1>"
 
-model_pickle = open("artefacts\classifier.pkl","rb")
+model_pickle = open("classifier.pkl","rb")
 clf = pickle.load(model_pickle)
 
 

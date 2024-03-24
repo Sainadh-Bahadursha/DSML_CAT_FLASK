@@ -21,3 +21,22 @@ COPY . .
 # to create the command to run the flask app predictios.py which was done in last class by command prompt command
 # local host used is 0.0.0.0 it is like public access host. It is Optional 
 CMD ["python","-m","flask","--app","predictions.py","run","--host=0.0.0.0"]
+
+
+# docker command to run in cmd
+
+# To build the image , -t represents tag and . represents current directory where dockerfile is present
+# docker build -t loan_app_flask_v1 .
+
+# To check all the images created
+# docker images
+
+# To inspect the image
+# docker inspect loan_app_flask_v1
+
+# changing the 5000 port to 8000 port and running the image i.e. container will be created
+# docker run -p 8000:5000 loan_app_flask_v1 
+
+# docker login -u sainadhbahadursha
+
+# docker pull sainadhbahadursha/dsml_cat_docker_demo:latest
