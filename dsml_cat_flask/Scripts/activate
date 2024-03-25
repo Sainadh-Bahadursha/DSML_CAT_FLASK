@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\saina\Desktop\DS_ML_AI\Scaler\Module_17_MLOPS\Lecture_3_Develop Web APIs using Flask\Git_repo_flask\DSML_CAT_FLASK\dsml_cat_flask"
+VIRTUAL_ENV="C:\Users\saina\Desktop\DS_ML_AI\Scaler\Module_17_MLOPS\Lecture_3_Develop_Web_APIs_using_Flask\Git_repo_flask\DSML_CAT_FLASK\dsml_cat_flask"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

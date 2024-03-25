@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\saina\Desktop\DS_ML_AI\Scaler\Module_17_MLOPS\Lecture_3_Develop Web APIs using Flask\Git_repo_flask\DSML_CAT_FLASK\dsml_cat_flask
+set VIRTUAL_ENV=C:\Users\saina\Desktop\DS_ML_AI\Scaler\Module_17_MLOPS\Lecture_3_Develop_Web_APIs_using_Flask\Git_repo_flask\DSML_CAT_FLASK\dsml_cat_flask
 
 if not defined PROMPT set PROMPT=$P$G
 
