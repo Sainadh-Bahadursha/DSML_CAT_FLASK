@@ -7,4 +7,3 @@ def test_get_square():
     print("Test case was successfull")
 
 test_get_square()
-    
