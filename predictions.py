@@ -9,7 +9,7 @@ def hello_world():
     return "<p>Hello, World!</p>"
 @app.route("/ping",methods = ["GET"]) # home page/ping # Default method will be Get
 def pinger():
-    return "<H1>I am pinging!</H1>"
+    return {"MESSAGE": "Hi I am Pinging"}
 
 model_pickle = open("classifier.pkl","rb")
 clf = pickle.load(model_pickle)

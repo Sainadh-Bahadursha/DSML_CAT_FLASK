@@ -1,4 +1,4 @@
-from hello import app
+from predictions import app
 import pytest
 import json
 

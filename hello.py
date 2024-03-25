@@ -8,4 +8,4 @@ def hello_world():
 
 @app.route("/ping",methods = ["GET"]) # home page/ping # Default method will be Get
 def pinger():
-    return "<H1>I am pinging!</H1>"
+    return {"MESSAGE": "Hi I am Pinging"}
