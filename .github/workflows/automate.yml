@@ -3,8 +3,10 @@ name: Running tests on push to main
 
 # event is pushing something to main will triggers the event
 on:
-  push:
-    branches: [ "main" ]
+    push:
+        branches: [ "main" ]
+    pull_request:
+        branches: [ "main" ]
 
 jobs:
     build:
