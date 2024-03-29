@@ -6,10 +6,10 @@ app = Flask(__name__)
 
 @app.route("/") # Decorator # home page url
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "<p>Hello, World! - Version 2</p>"
 @app.route("/ping",methods = ["GET"]) # home page/ping # Default method will be Get
 def pinger():
-    return {"MESSAGE": "Hi I am Pinging"}
+    return {"MESSAGE": "Hi I am Pinging - Version 2"}
 
 model_pickle = open("classifier.pkl","rb")
 clf = pickle.load(model_pickle)

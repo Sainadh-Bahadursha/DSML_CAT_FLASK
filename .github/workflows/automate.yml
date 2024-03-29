@@ -1,5 +1,5 @@
 # name of the workflow
-name: Running tests on push to main 
+name: Running tests on push to main and deploying to ECS
 
 # event is pushing something to main will triggers the event
 on:
@@ -8,8 +8,14 @@ on:
     pull_request:
         branches: [ "main" ]
 
+# environment variable is a convenient option to take variables from user at the starting itself
+env:
+    AWS_REGION: us-east-1
+
 jobs:
-    build:
+    # job1 is for Continuous integration
+    job1:
+        #build: build is not necessary if we have more jobs to run
 
         # running on ubuntu server
         runs-on: ubuntu-latest
@@ -37,3 +43,66 @@ jobs:
         -   name: Run test cases
             run:
                 pytest test_predictions.py
+    
+    # Job2 is for continuous delivery
+    job2:
+        # job2 will run only when job1 is completed its running
+        needs: job1
+        runs-on: ubuntu-latest
+        environment: production
+
+        steps:
+            # action/cheeckout will give access of our repository to the workflow. Use documentation
+            -   name: Giving access to repository
+                uses: actions/checkout@v4
+
+            # Link the local to Aws using Aws credentials    
+            -   name: Configure AWS credentials
+                uses: aws-actions/configure-aws-credentials@v1
+
+                with:
+                    # Access key and secret access key is a secret - environment variable taken from github secrets
+                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    aws-region: ${{env.AWS_REGION}}
+            
+            # Login to ECR using above secret credentials
+            -   name: Login to Amazon ECR
+                id: login-ecr
+                uses: aws-actions/amazon-ecr-login@v1
+            
+            # building, tagging and pushing docker image from local to ECR
+            -   name: Build, tag, and push image to Amazon ECR
+                id: build-image
+
+                # Create environment variable for building, tagging and pushing
+                env:
+                    ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                    # name of repository
+                    ECR_REPOSITORY: loan_app_cat_sainadh
+                    # image tag is taken from github
+                    IMAGE_TAG: ${{ github.sha }}
+                
+                # 
+                run: |
+                    docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+                    docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                    echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+            # Create a task definition 
+            -   name: Fill in the new image ID in the Amazon ECS task definition
+                id: task-def
+                uses: aws-actions/amazon-ecs-render-task-definition@v1
+                with:
+                    # need task definition in json format. Get json from manually pre-built task definition 
+                    task-definition: task-definition.json
+                    container-name: loan_app_cat_sainadh_container_cd
+                    image: ${{ steps.build-image.outputs.image }}
+
+            -   name: Deploy Amazon ECS task definition
+                uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+                with:
+                    task-definition: ${{ steps.task-def.outputs.task-definition }}
+                    service: loan_app_cat_sainadh_service_cd
+                    cluster: loan_app_cat_cluster_sainadh
+                    wait-for-service-stability: true
